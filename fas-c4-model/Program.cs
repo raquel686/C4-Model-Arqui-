@@ -154,10 +154,10 @@ namespace fas_c4_model
             contextView.PaperSize = PaperSize.A4_Landscape;
             containerView.AddAllElements();
 
-
+            
             // 3. Diagrama de Componentes
-           
-            // 3. Diagrama de Componentes
+            
+            //SUSCRIPCION
 
             Component SubscriptionController = SubscriptionContext.AddComponent("Subscription Controller", "", "Spring Boot REST Controller");
             Component ValidationComponent = SubscriptionContext.AddComponent("Validation Component Service", " ", "Spring Component");
@@ -173,8 +173,7 @@ namespace fas_c4_model
             SubscriptionRepository.Uses(SubscriptionContextDatabase, "", "JDBC");
             PaymentVerifier.Uses(PayPal, "", "JSON/HTTPS");
             ServiceComponent.Uses(SubscriptionRepository, "", "JSON/HTTPS");
-
-            // Tags           
+   
             SubscriptionController.AddTags("SubscriptionController");
             ValidationComponent.AddTags("ValidationComponent");
             PaymentVerifier.AddTags("PaymentVerifier");
@@ -268,6 +267,53 @@ namespace fas_c4_model
             componentView3.Add(apiGateway);
             componentView3.Add(QualificationContextDatabase);
             componentView3.AddAllComponents();
+            structurizrClient.UnlockWorkspace(workspaceId);
+            structurizrClient.PutWorkspace(workspaceId, workspace);
+            
+             //SERVICES
+            Component ServicesController = ServicesContext.AddComponent("Services Controller", "", "REST API");
+            Component ConsultationService = ServicesContext.AddComponent("Consultation Service", "", "Spring component");
+            Component ServiceValidation = ServicesContext.AddComponent("Sevice Validation", "", "NestJS component");
+            Component ConsultationPaymentVerifier = ServicesContext.AddComponent("Consultation Payment Verifier", "", "NestJS component");
+            Component ConsultationPaymentVerifierRepo = ServicesContext.AddComponent("Consultation Payment Verifier Repository", "", "Spring component");
+            Component ConsultationServiceRepo = ServicesContext.AddComponent("Consultation Service Lawyer Repository", "", "Spring component");
+
+            apiGateway.Uses(ServicesController, "JSON/HTTPS");
+            ServicesController.Uses(ConsultationService, "invoca servicios de");
+            ConsultationService.Uses(ServiceValidation, "JSON/HTTPS");
+            ConsultationService.Uses(ConsultationServiceRepo, "JDBC");
+            ConsultationService.Uses(GoogleMeets, "JSON/HTTPS");
+            ServiceValidation.Uses(ConsultationPaymentVerifier, "Json/HTTPS");
+            ServiceValidation.Uses(LinkedIn, "Json/HTTPS");
+            ConsultationPaymentVerifier.Uses(ConsultationPaymentVerifierRepo, "JDBC");
+            ConsultationPaymentVerifier.Uses(PayPal, "Json/HTTPS");
+            ConsultationPaymentVerifierRepo.Uses(ServicesContextDatabase, "JDBC");
+            ConsultationServiceRepo.Uses(ServicesContextDatabase, "JDBC");
+
+            ServicesController.AddTags("ServicesController");
+            ConsultationService.AddTags("ConsultationService");
+            ServiceValidation.AddTags("ServiceValidation");
+            ConsultationPaymentVerifier.AddTags("ConsultationPaymentVerifier");
+            ConsultationPaymentVerifierRepo.AddTags("ConsultationPaymentVerifierRepo");
+            ConsultationServiceRepo.AddTags("ConsultationServiceRepo");
+
+            styles.Add(new ElementStyle("ServicesController") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("ConsultationService") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("ServiceValidation") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("ConsultationPaymentVerifier") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("ConsultationPaymentVerifierRepo") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("ConsultationServiceRepo") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+
+            ComponentView componentView4 = viewSet.CreateComponentView(ServicesContext, "Components 4", "Component Diagram Services Context");
+            componentView4.PaperSize = PaperSize.A4_Landscape;
+            componentView4.Add(mobileApplication);
+            componentView4.Add(webApplication);
+            componentView4.Add(apiGateway);
+            componentView4.Add(ServicesContextDatabase);
+            componentView4.Add(GoogleMeets);
+            componentView4.Add(LinkedIn);
+            componentView4.Add(PayPal);
+            componentView4.AddAllComponents();
             structurizrClient.UnlockWorkspace(workspaceId);
             structurizrClient.PutWorkspace(workspaceId, workspace);
 
