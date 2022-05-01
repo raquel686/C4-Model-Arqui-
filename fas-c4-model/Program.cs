@@ -236,61 +236,42 @@ namespace fas_c4_model
             componentView2.AddAllComponents();
             structurizrClient.UnlockWorkspace(workspaceId);
             structurizrClient.PutWorkspace(workspaceId, workspace);
-            /*
-            Component domainLayer = ServicesContext.AddComponent("Domain Layer", "", "Spring Boot");
-            Component monitoringController = ServicesContext.AddComponent("Monitoring Controller", "REST API endpoints de monitoreo.", "Spring Boot REST Controller");
-            Component monitoringApplicationService = ServicesContext.AddComponent("Monitoring Application Service", "Provee métodos para el monitoreo, pertenece a la capa Application de DDD", "Spring Component");
-            Component flightRepository = ServicesContext.AddComponent("Flight Repository", "Información del vuelo", "Spring Component");
-            Component vaccineLoteRepository = ServicesContext.AddComponent("VaccineLote Repository", "Información de lote de vacunas", "Spring Component");
-            Component locationRepository = ServicesContext.AddComponent("Location Repository", "Ubicación del vuelo", "Spring Component");
-            Component aircraftSystemFacade = ServicesContext.AddComponent("Aircraft System Facade", "", "Spring Component");
+            
+            
+            //QUALIFICATION
+            Component QualificationController = QualificationContext.AddComponent("Qualification Controller", "", "NestJS");
+            Component QualificationValidation = QualificationContext.AddComponent("Qualification Validation Component", "", "NestJS");
+            Component QualificationRepository = QualificationContext.AddComponent("Qualification Repository", "", "NestJS");
+            Component QServiceComponent = QualificationContext.AddComponent("Qualification Service Component", "", "NestJS");
 
-            apiGateway.Uses(monitoringController, "", "JSON/HTTPS");
-            monitoringController.Uses(monitoringApplicationService, "Invoca métodos de monitoreo");
-            monitoringController.Uses(aircraftSystemFacade, "Usa");
-            monitoringApplicationService.Uses(domainLayer, "Usa", "");
-            monitoringApplicationService.Uses(flightRepository, "", "JDBC");
-            monitoringApplicationService.Uses(vaccineLoteRepository, "", "JDBC");
-            monitoringApplicationService.Uses(locationRepository, "", "JDBC");
-            flightRepository.Uses(ServicesContextDatabase, "", "JDBC");
-            vaccineLoteRepository.Uses(ServicesContextDatabase, "", "JDBC");
-            locationRepository.Uses(ServicesContextDatabase, "", "JDBC");
+            apiGateway.Uses(QualificationController, "", "JSON/HTTPS");
+            QualificationController.Uses(QServiceComponent, "", "JSON/HTTPS");
+            QualificationController.Uses(QualificationValidation, "", "Validation Prompts");
+            QServiceComponent.Uses(QualificationRepository, "", "JSON/HTTPS");
+            QualificationRepository.Uses(QualificationContextDatabase, "", "JDBC");
+            QualificationValidation.Uses(QualificationRepository, "", "JSON/HTTPS");
 
-            locationRepository.Uses(LinkedIn, "", "JSON/HTTPS");
-            aircraftSystemFacade.Uses(GoogleMeets, "JSON/HTTPS");
+            QualificationController.AddTags("QualificationController");
+            QualificationValidation.AddTags("QualificationValidation");
+            QualificationRepository.AddTags("QualificationRepository");
+            QServiceComponent.AddTags("QServiceComponent");
 
-            // Tags
-            domainLayer.AddTags("DomainLayer");
-            monitoringController.AddTags("MonitoringController");
-            monitoringApplicationService.AddTags("MonitoringApplicationService");
-            flightRepository.AddTags("FlightRepository");
-            vaccineLoteRepository.AddTags("VaccineLoteRepository");
-            locationRepository.AddTags("LocationRepository");
-            aircraftSystemFacade.AddTags("AircraftSystemFacade");
+            styles.Add(new ElementStyle("QualificationController") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("QualificationValidation") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("QualificationRepository") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("QServiceComponent") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
 
-            styles.Add(new ElementStyle("DomainLayer") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("MonitoringController") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("MonitoringApplicationService") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("MonitoringDomainModel") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("FlightStatus") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("FlightRepository") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("VaccineLoteRepository") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("LocationRepository") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("AircraftSystemFacade") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-
-            ComponentView componentView = viewSet.CreateComponentView(ServicesContext, "Components", "Component Diagram");
-            componentView.PaperSize = PaperSize.A4_Landscape;
-            componentView.Add(mobileApplication);
-            componentView.Add(webApplication);
-            componentView.Add(apiGateway);
-            componentView.Add(ServicesContextDatabase);
-            componentView.Add(GoogleMeets);
-            componentView.Add(LinkedIn);
-            componentView.AddAllComponents();
-
+            ComponentView componentView3 = viewSet.CreateComponentView(QualificationContext, "Components 3", "Component Diagram Qualification Context");
+            componentView3.PaperSize = PaperSize.A4_Landscape;
+            componentView3.Add(mobileApplication);
+            componentView3.Add(webApplication);
+            componentView3.Add(apiGateway);
+            componentView3.Add(QualificationContextDatabase);
+            componentView3.AddAllComponents();
             structurizrClient.UnlockWorkspace(workspaceId);
             structurizrClient.PutWorkspace(workspaceId, workspace);
-            */
+
+        
 
         }
     }
