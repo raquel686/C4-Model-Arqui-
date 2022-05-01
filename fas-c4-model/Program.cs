@@ -157,60 +157,85 @@ namespace fas_c4_model
 
             // 3. Diagrama de Componentes
            
-            Component SubscriptionController = ServicesContext.AddComponent("Subscription Controller", "", "Spring Boot REST Controller");
-            Component ValidationComponent = ServicesContext.AddComponent("Validation Component Service", " ", "Spring Component");
-            
-            Component PaymentVerifier = ServicesContext.AddComponent("Payment Verifier", "", "Spring Component");
-            Component SubscriptionRepository = ServicesContext.AddComponent("Subscription Repository", "", "Spring Component");
-            Component ServiceComponent = ServicesContext.AddComponent("Service Component", "", "Spring Component");
+            // 3. Diagrama de Componentes
+
+            Component SubscriptionController = SubscriptionContext.AddComponent("Subscription Controller", "", "Spring Boot REST Controller");
+            Component ValidationComponent = SubscriptionContext.AddComponent("Validation Component Service", " ", "Spring Component");
+            Component PaymentVerifier = SubscriptionContext.AddComponent("Payment Verifier", "", "Spring Component");
+            Component SubscriptionRepository = SubscriptionContext.AddComponent("Subscription Repository", "", "Spring Component");
+            Component ServiceComponent = SubscriptionContext.AddComponent("Service Component", "", "Spring Component");
 
             apiGateway.Uses(SubscriptionController, "", "JSON/HTTPS");
             SubscriptionController.Uses(ValidationComponent, "Validates Prompts");
             SubscriptionController.Uses(ServiceComponent, "Usa");
-            
-       
             ValidationComponent.Uses(PaymentVerifier, "", "JDBC");
-           
-            
-            PaymentVerifier.Uses(ServicesContextDatabase, "", "JDBC");
-            SubscriptionRepository.Uses(ServicesContextDatabase, "", "JDBC");
-       
-            PaymentVerifier.Uses(LinkedIn, "", "JSON/HTTPS");
+            PaymentVerifier.Uses(SubscriptionContextDatabase, "", "JDBC");
+            SubscriptionRepository.Uses(SubscriptionContextDatabase, "", "JDBC");
+            PaymentVerifier.Uses(PayPal, "", "JSON/HTTPS");
             ServiceComponent.Uses(SubscriptionRepository, "", "JSON/HTTPS");
-            
 
-            // Tags
-            
+            // Tags           
             SubscriptionController.AddTags("SubscriptionController");
             ValidationComponent.AddTags("ValidationComponent");
-            
             PaymentVerifier.AddTags("PaymentVerifier");
             SubscriptionRepository.AddTags("SubscriptionRepository");
             ServiceComponent.AddTags("ServiceComponent");
 
-            styles.Add(new ElementStyle("DomainLayer") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
             styles.Add(new ElementStyle("SubscriptionController") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
             styles.Add(new ElementStyle("ValidationComponent") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("MonitoringDomainModel") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            styles.Add(new ElementStyle("FlightStatus") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
-            
             styles.Add(new ElementStyle("PaymentVerifier") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
             styles.Add(new ElementStyle("SubscriptionRepository") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
             styles.Add(new ElementStyle("ServiceComponent") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
 
-            ComponentView componentView = viewSet.CreateComponentView(ServicesContext, "Components", "Component Diagram");
+            ComponentView componentView = viewSet.CreateComponentView(SubscriptionContext, "Components", "Component Diagram Subscription");
             componentView.PaperSize = PaperSize.A4_Landscape;
             componentView.Add(mobileApplication);
             componentView.Add(webApplication);
             componentView.Add(apiGateway);
-            componentView.Add(ServicesContextDatabase);
-          
-            componentView.Add(LinkedIn);
+            componentView.Add(SubscriptionContextDatabase);
+            componentView.Add(PayPal);
             componentView.AddAllComponents();
-
             structurizrClient.UnlockWorkspace(workspaceId);
             structurizrClient.PutWorkspace(workspaceId, workspace);
 
+
+            //USER PROFILE
+            Component SignIn = UserProfileContext.AddComponent("Sign In Controller", "", "NestJS");
+            Component LogIn = UserProfileContext.AddComponent("Log In Controller", "", "NestJS(NodeJS) REST Controller");
+            Component ValidationComponentU = UserProfileContext.AddComponent("Validation Component", "", "NestJS component");
+            Component LawyerProfile = UserProfileContext.AddComponent("Lawyer Profile Repository", "", "NestJS comonent");
+            Component UserProfileRep = UserProfileContext.AddComponent("User Profile Repository", "", "NestJS component");
+
+            apiGateway.Uses(SignIn, "", "JSON/HTTPS");
+            apiGateway.Uses(LogIn, "", "JSON/HTTPS");
+            SignIn.Uses(ValidationComponentU, "", "Validates Prompts");
+            LogIn.Uses(ValidationComponentU, "", "Validates Prompts");
+            ValidationComponentU.Uses(LawyerProfile, "", "JSON/HTTPS");
+            ValidationComponentU.Uses(UserProfileRep, "", "JSON/HTTPS");
+            LawyerProfile.Uses(UserProfileContextDatabase, "", "JDBC");
+            UserProfileRep.Uses(UserProfileContextDatabase, "", "JDBC");
+
+            SignIn.AddTags("SignIn");
+            LogIn.AddTags("LogIn");
+            ValidationComponentU.AddTags("ValidateComponentU");
+            LawyerProfile.AddTags("LawyerProfile");
+            UserProfileRep.AddTags("UserProfileRep");
+
+            styles.Add(new ElementStyle("SignIn") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("LogIn") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("ValidateComponentU") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("LawyerProfile") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+            styles.Add(new ElementStyle("UserProfileRep") { Shape = Shape.Component, Background = "#facc2e", Icon = "" });
+
+            ComponentView componentView2 = viewSet.CreateComponentView(UserProfileContext, "Components 2", "Component Diagram User Profile");
+            componentView2.PaperSize = PaperSize.A4_Landscape;
+            componentView2.Add(mobileApplication);
+            componentView2.Add(webApplication);
+            componentView2.Add(apiGateway);
+            componentView2.Add(UserProfileContextDatabase);
+            componentView2.AddAllComponents();
+            structurizrClient.UnlockWorkspace(workspaceId);
+            structurizrClient.PutWorkspace(workspaceId, workspace);
             /*
             Component domainLayer = ServicesContext.AddComponent("Domain Layer", "", "Spring Boot");
             Component monitoringController = ServicesContext.AddComponent("Monitoring Controller", "REST API endpoints de monitoreo.", "Spring Boot REST Controller");
